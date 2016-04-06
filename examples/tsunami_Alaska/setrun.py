@@ -295,9 +295,12 @@ def setrun(claw_pkg='geoclaw'):
     amrdata.amr_levels_max = 4
 
     # List of refinement ratios at each level (length at least amr_level_max-1)
-    amrdata.refinement_ratios_x = [5, 6, 6, 3, 30]
-    amrdata.refinement_ratios_y = [5, 6, 6, 3, 30]
-    amrdata.refinement_ratios_t = [5, 6, 6, 3, 4]
+    #amrdata.refinement_ratios_x = [5, 6, 6, 3, 30]
+    #amrdata.refinement_ratios_y = [5, 6, 6, 3, 30]
+    #amrdata.refinement_ratios_t = [5, 6, 6, 3, 4]
+    amrdata.refinement_ratios_x = [4, 4, 4, 3, 30]
+    amrdata.refinement_ratios_y = [4, 4, 4, 3, 30]
+    amrdata.refinement_ratios_t = [4, 4, 4, 3, 4]
 
 
     # Specify type of each aux variable in amrdata.auxtype.
@@ -307,11 +310,11 @@ def setrun(claw_pkg='geoclaw'):
 
 
     # Flag for refinement based on Richardson error estimater:
-    amrdata.flag_richardson = False    # use Richardson?
-    amrdata.flag_richardson_tol = 1.0  # Richardson tolerance
+    amrdata.flag_richardson = True    # use Richardson?
+    amrdata.flag_richardson_tol = 0.004  # Richardson tolerance
     
     # Flag for refinement using routine flag2refine:
-    amrdata.flag2refine = True      # use this?
+    amrdata.flag2refine = False      # use this?
     amrdata.flag2refine_tol = 0.004  # tolerance used in this routine
     # Note: this tolerance is not used in the surface-flagging method
     #       only the wave_tolerance is used (a geoclaw specific parameters)
