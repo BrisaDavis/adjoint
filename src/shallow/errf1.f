@@ -42,6 +42,7 @@ c ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 c
 
 c
+      write(*,*) "Made it into errf1"
       time  = rnode(timemult, mptr)
       xleft = rnode(cornxlo,mptr)
       levm  = node(nestlevel, mptr)
@@ -99,37 +100,37 @@ c
 c             If the adjacent cell isn't in the same wet/dry
 c             state, don't use it to calculate the error
               aux_a = auxfine(1,ifine+1,jfine)
-              if(sign(aux_fine, aux_a) .ne.
-     .                          sign(aux_fine, aux_fine))then
-                  term2 = 0.d0
-                  interp2 = .false.
-              else
+c              if(sign(aux_fine, aux_a) .ne.
+c     .                          sign(aux_fine, aux_fine))then
+c                  term2 = 0.d0
+c                  interp2 = .false.
+c              else
                   terms = terms + 1
                   term2 = rctfine(m,ifine+1,jfine)
                   interp2 = .true.
-              endif
+c              endif
 
               aux_a = auxfine(1,ifine+1,jfine+1)
-              if(sign(aux_fine, aux_a) .ne.
-     .                          sign(aux_fine, aux_fine))then
-                  term3 = 0.d0
-                  interp3 = .false.
-              else
+c              if(sign(aux_fine, aux_a) .ne.
+c     .                          sign(aux_fine, aux_fine))then
+c                  term3 = 0.d0
+c                  interp3 = .false.
+c              else
                   terms = terms + 1
                   term3 = rctfine(m,ifine+1,jfine+1)
                   interp3 = .true.
-              endif
+c              endif
 
               aux_a = auxfine(1,ifine,jfine+1)
-              if(sign(aux_fine, aux_a) .ne.
-     .                          sign(aux_fine, aux_fine))then
-                  term4 = 0.d0
-                  interp4 = .false.
-              else
+c              if(sign(aux_fine, aux_a) .ne.
+c     .                          sign(aux_fine, aux_fine))then
+c                  term4 = 0.d0
+c                  interp4 = .false.
+c              else
                   terms = terms + 1
                   term4 = rctfine(m,ifine,jfine+1)
                   interp4 = .true.
-              endif
+c              endif
 
 c             # divide by (aval*order) for relative error
               aval  = (term1+term2+term3+term4)/terms
@@ -193,7 +194,8 @@ c         Set innerproduct for fine grid
         write(*,*) "TESTING:"
         write(*,*) xofi,yofj, etaerr
         write(*,*) eta1, eta2, eta3, eta4, etacrse
-        write(*,*) aux_fine, aux_crse
+        write(*,*) aux_fine, auxfine(1,ifine+1,jfine),
+     .  auxfine(1,ifine+1,jfine+1), auxfine(1,ifine,jfine+1), aux_crse
         write(*,*) rctfine(1,ifine,jfine), rctcrse(1,i,j)
         write(*,*) "Innerprod: ", auxfine(innerprod_index,ifine,jfine)
           endif
