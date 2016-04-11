@@ -188,19 +188,19 @@ c         Set innerproduct for fine grid
      .           calculate_max_innerproduct(time,xofi,yofj,etaerr,
      .           qerr(2),qerr(3),auxfine(1,ifine,jfine))
 
-          if (auxfine(innerprod_index,ifine,jfine) >= 0.05) then
-          if ((xofi >= 200) .and. (xofi <=210)) then
-          if ((yofj >= 10) .and. (yofj <=20)) then
-        write(*,*) "TESTING:"
-        write(*,*) xofi,yofj, etaerr
-        write(*,*) eta1, eta2, eta3, eta4, etacrse
-        write(*,*) aux_fine, auxfine(1,ifine+1,jfine),
-     .  auxfine(1,ifine+1,jfine+1), auxfine(1,ifine,jfine+1), aux_crse
-        write(*,*) rctfine(1,ifine,jfine), rctcrse(1,i,j)
-        write(*,*) "Innerprod: ", auxfine(innerprod_index,ifine,jfine)
-          endif
-          endif
-          endif
+c          if (auxfine(innerprod_index,ifine,jfine) >= 0.05) then
+c          if ((xofi >= 200) .and. (xofi <=210)) then
+c          if ((yofj >= 10) .and. (yofj <=20)) then
+c        write(*,*) "TESTING:"
+c        write(*,*) xofi,yofj, etaerr
+c        write(*,*) eta1, eta2, eta3, eta4, etacrse
+c        write(*,*) aux_fine, auxfine(1,ifine+1,jfine),
+c     .  auxfine(1,ifine+1,jfine+1), auxfine(1,ifine,jfine+1), aux_crse
+c        write(*,*) rctfine(1,ifine,jfine), rctcrse(1,i,j)
+c        write(*,*) "Innerprod: ", auxfine(innerprod_index,ifine,jfine)
+c          endif
+c          endif
+c          endif
 
           if (interp2) auxfine(innerprod_index,ifine+1,jfine)  =
      .                          auxfine(innerprod_index,ifine,jfine)
@@ -269,5 +269,6 @@ c
         endif
       endif
 
+      write(*,*) "Leaving errf1"
       return
       end

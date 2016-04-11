@@ -219,6 +219,4 @@ subroutine setaux(mbc,mx,my,xlow,ylow,dx,dy,maux,aux)
         enddo
     endif
 
-    write(*,*) "Done with setaux"
-
 end subroutine setaux

@@ -25,7 +25,7 @@ c coarsen = coarsen the fine grid data (with double the usual
 c           number of ghost cells to prepare coarsened
 c           grid for error estimation.
 c :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
+       write(*,*) "In coarsen"
        do j = 1, mj2tot
 
          jfine = 2*(j-1) + 1
@@ -102,6 +102,7 @@ c          # set h on coarse grid based on surface, not conservative near shorel
          enddo
        enddo
 
+       write(*,*) "Leaving coarsen"
        return
        end
 

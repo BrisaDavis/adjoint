@@ -26,7 +26,7 @@ GIT_STATUS = True
 # Environment variable FC should be set to fortran compiler, e.g. gfortran
 
 # Compiler flags can be specified here or set as an environment variable
-FFLAGS = -O2 -fopenmp
+FFLAGS = -O2 -fopenmp -g -Wall -pedantic -fbounds-check -ffpe-trap=invalid,overflow,zero
 #FFLAGS ?= 
 
 # ---------------------------------
@@ -67,6 +67,9 @@ SOURCES = \
   $(ADJLIB)/shallow/flag2refine2.f90 \
   $(ADJLIB)/shallow/setaux.f90 \
   $(ADJLIB)/shallow/errf1.f \
+  $(ADJLIB)/shallow/prepbigstep.f \
+  $(ADJLIB)/shallow/prepregstep.f \
+  $(ADJLIB)/shallow/coarsen.f \
   $(GEOLIB)/qinit.f90 \
   $(GEOLIB)/topo_update.f90 \
   $(GEOLIB)/cellgridintegrate2.f \
@@ -115,8 +118,6 @@ SOURCES = \
   $(AMRLIB)/birect.f \
   $(AMRLIB)/cleanup.f \
   $(AMRLIB)/colate2.f \
-  $(AMRLIB)/prepregstep.f \
-  $(AMRLIB)/prepbigstep.f \
   $(AMRLIB)/bufnst2.f \
   $(AMRLIB)/flagger.f \
   $(AMRLIB)/flagregions.f \
@@ -169,7 +170,6 @@ SOURCES = \
   $(AMRLIB)/griddomup.f \
   $(AMRLIB)/griddomcopy.f \
   $(AMRLIB)/griddomshrink.f \
-  $(AMRLIB)/coarsen.f \
   $(AMRLIB)/auxcoarsen.f \
   $(AMRLIB)/intcopy.f \
   $(AMRLIB)/preintcopy.f \

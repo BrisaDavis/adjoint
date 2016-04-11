@@ -23,6 +23,7 @@ c  error relation for a pth order  accurate integration formula.
 c  flag error plane as either bad (needs refinement), or good.
 c :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 c
+       write(*,*) "In errest"
        mitot  = nx + 2*nghost
        mjtot  = ny + 2*nghost
        locnew = node(store1,mptr)
@@ -44,6 +45,7 @@ c  the one giant step based on old values is done. now take
 c  one regular step based on new values. 
 c  boundary values already in locbig, (see subr. flagger)
 c
+      write(*,*) "About to call regstep"
       locbig = node(tempptr,mptr)
       locaux = node(storeaux,mptr)
       call prepregstep(nvar,naux,lcheck,mptr,nx,ny,mitot,mjtot,
@@ -51,6 +53,7 @@ c
 c
 c     ## locamrflags allocated in flagger. may previously have been used 
 c     ## by flag2refine so make sure not to overwrite
+      write(*,*) "About to call errf1"
       locamrflags = node(storeflags, mptr)    
       mbuff = max(nghost,ibuff+1)  
       mibuff = nx + 2*mbuff 
@@ -60,5 +63,6 @@ c     ## by flag2refine so make sure not to overwrite
      1           alloc(locaux),naux,auxbgc)
 
 c
+      write(*,*) "Leaving errest"
       return
       end
