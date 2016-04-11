@@ -73,7 +73,7 @@ def setplot(plotdata):
     plotitem.pcolor_cmax = 0.2
     plotitem.add_colorbar = True
     plotitem.amr_celledges_show = [0,0,0]
-    plotitem.patchedges_show = 1
+    plotitem.patchedges_show = [0,0,1]
 
     # Land
     plotitem = plotaxes.new_plotitem(plot_type='2d_pcolor')

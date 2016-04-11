@@ -46,8 +46,7 @@ def setrun(claw_pkg='geoclaw'):
     #------------------------------------------------------------------
     
     #probdata = rundata.new_UserData(name='probdata',fname='setprob.data')
-
-
+    
     #------------------------------------------------------------------
     # GeoClaw specific parameters:
     #------------------------------------------------------------------
@@ -296,9 +295,9 @@ def setrun(claw_pkg='geoclaw'):
 
 
     # Flag using refinement routine flag2refine rather than richardson error
-    amrdata.flag_richardson = True    # use Richardson?
-    amrdata.flag_richardson_tol = 0.004  # Richardson tolerance
-    amrdata.flag2refine = False
+    amrdata.flag_richardson = False    # use Richardson?
+    amrdata.flag_richardson_tol = 0.4  # Richardson tolerance
+    amrdata.flag2refine = True
 
     # steps to take on each level L between regriddings of level L+1:
     amrdata.regrid_interval = 3
@@ -383,7 +382,7 @@ def setgeo(rundata):
     # Refinement settings
     refinement_data = rundata.refinement_data
     refinement_data.variable_dt_refinement_ratios = True
-    refinement_data.wave_tolerance = 1.e-1
+    refinement_data.wave_tolerance = 1.e-3
     refinement_data.deep_depth = 1e2
     refinement_data.max_level_deep = 3
 
@@ -419,7 +418,40 @@ def setgeo(rundata):
     # end of function setgeo
     # ----------------------
 
-
+#-------------------
+def setadjoint(rundata):
+    #-------------------
+    
+    """
+        Reading in all of the checkpointed Adjoint files
+        """
+    
+    import glob, os,sys
+    
+    # Setting up output to plot adjoint results
+    outdir = 'adjoint/_output'
+    outdir2 = 'adjoint/_outputReversed'
+    
+    os.system('mkdir -p %s' % outdir2)
+    
+    files = glob.glob(outdir+'/fort.q0*')
+    n = len(files)
+    
+    for k in range(n):
+        fname = files[k]
+        newname = outdir2 + '/fort.q%s' % str(n-k-1).zfill(4)
+        cmd = 'cp %s %s' % (fname,newname)
+        #print cmd
+        os.system(cmd)
+        fname = fname.replace('q','t')
+        newname = newname.replace('q','t')
+        cmd = 'cp %s %s' % (fname,newname)
+        #print cmd
+        os.system(cmd)
+    
+    return rundata
+# end of function setadjoint
+# ----------------------
 
 if __name__ == '__main__':
     # Set up run-time parameters and write all data files.
