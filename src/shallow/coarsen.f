@@ -12,20 +12,26 @@ c
 c     # modified from update.f to coarsen grid taking into
 c     account wet and dry cells.
 c
-       use amr_module
-       implicit double precision (a-h, o-z)
+       use amr_module, only: mcapa
+       implicit none
 
-       dimension  valdub(nvar,midub, mjdub)
-       dimension  auxdub(naux,midub, mjdub)
-       dimension  valbgc(nvar,mi2tot,mj2tot)
-       dimension  auxbgc(naux,mi2tot,mj2tot)
+       integer, intent(in) :: midub,mjdub,mi2tot,mj2tot,nvar,naux
+       real(kind=8), intent(in) :: valdub(nvar,midub, mjdub)
+       real(kind=8), intent(in) :: auxdub(naux,midub, mjdub)
+       real(kind=8), intent(inout) :: valbgc(nvar,mi2tot,mj2tot)
+       real(kind=8), intent(inout) :: auxbgc(naux,mi2tot,mj2tot)
+
+c      # Local variables
+       integer :: j,jfine,i,ifine,jco,ico,nwet
+       real(kind=8) :: capac,bc,etasum,hsum,husum,hvsum,capa
+       real(kind=8) :: hf,huf,hvf,bf,etaf,etaav,hav,hc,huc,hvc
 
 c :::::::::::::::::::::::: COARSEN ::::::::::::::::::::::::::::::::
 c coarsen = coarsen the fine grid data (with double the usual
 c           number of ghost cells to prepare coarsened
 c           grid for error estimation.
 c :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-       write(*,*) "In coarsen"
+       write(*,*) "In coarsen. size of valbgc: ", size(valbgc)
        do j = 1, mj2tot
 
          jfine = 2*(j-1) + 1

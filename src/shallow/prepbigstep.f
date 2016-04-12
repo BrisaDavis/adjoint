@@ -4,21 +4,31 @@ c
        subroutine prepbigstep(nvar,naux,lcheck,mptr,nx,ny,midub,mjdub,
      .                       valbgc,auxbgc,mi2tot,mj2tot)
 
-       use amr_module
-       implicit double precision (a-h,o-z)
+       use amr_module, only: rnode,cornylo,cornxlo,evol,hxposs,hyposs
+       use amr_module, only: NEEDS_TO_BE_SET,nghost,store2,timemult
+       use amr_module, only: timeSetaux,possk,alloc,node,timeSetauxCPU
+       implicit none
 
-       double precision valdub(nvar,midub,mjdub)
-       double precision auxdub(naux,midub,mjdub)
-       double precision valbgc(nvar,mi2tot,mj2tot)
-       double precision auxbgc(naux,mi2tot,mj2tot)
-       dimension fp(nvar,mi2tot,mj2tot),gp(nvar,mi2tot,mj2tot)
-       dimension fm(nvar,mi2tot,mj2tot),gm(nvar,mi2tot,mj2tot)
+       integer, intent(in) :: nvar, naux, lcheck, mptr, nx, ny
+       integer, intent(in) :: midub, mjdub, mi2tot, mj2tot
+       real(kind=8), intent(inout) :: valbgc(nvar,mi2tot,mj2tot)
+       real(kind=8), intent(inout) :: auxbgc(naux,mi2tot,mj2tot)
+
+c      # Local variables
+       real(kind=8) :: valdub(nvar,midub,mjdub)
+       real(kind=8) :: auxdub(naux,midub,mjdub)
+       real(kind=8) :: fp(nvar,mi2tot,mj2tot),gp(nvar,mi2tot,mj2tot)
+       real(kind=8) :: fm(nvar,mi2tot,mj2tot),gm(nvar,mi2tot,mj2tot)
+       real(kind=8) :: hx,hy,hx2,hy2,dt,dt2,dtnew2,time,tpre
+       integer :: mitot,mjtot,ng2,locold,mx,my
+       real(kind=8) :: xlow,ylow,xl,yb
 
        !for setaux timing
        integer :: clock_start, clock_finish, clock_rate
        real(kind=8) :: cpu_start, cpu_finish
 
-       write(*,*) "In prepbigstep"
+       write(*,*) "In prepbigstep. size of valbgc: ", size(valbgc)
+       write(*,*) "In prepbigstep. size of auxbgc: ", size(auxbgc)
           hx  = hxposs(lcheck)
           hy  = hyposs(lcheck)
           hx2 = 2.d0*hx
@@ -65,6 +75,8 @@ c             # Generate aux for coarse grid
           endif
           write(*,*) "Finished setting aux values"
 
+          write(*,*) "In prepbigstep 2. size of valbgc: ", size(valbgc)
+          write(*,*) "In prepbigstep 2. size of auxbgc: ", size(auxbgc)
 c         # fill it - use enlarged (before coarsening) aux arrays
           call bound(tpre,nvar,ng2,valdub,midub,mjdub,mptr,
      1               auxdub,naux)
@@ -80,6 +92,9 @@ c         coarsen by 2 in every direction
      2                dt2,dtnew2,hx2,hy2,nvar,
      3                xlow,ylow,tpre,mptr,naux,auxbgc)
           write(*,*) "Finished stepping grid"
+
+          write(*,*) "In prepbigstep 3. size of valbgc: ", size(valbgc)
+          write(*,*) "In prepbigstep 3. size of auxbgc: ", size(auxbgc)
 
 c         update counts for error estimation work
           evol = evol + (nx/2)*(ny/2)

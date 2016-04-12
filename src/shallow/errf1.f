@@ -5,7 +5,9 @@ c
      2                 mitot,mjtot,rctflg,mibuff,mjbuff,auxfine,
      2                 naux,auxcrse)
 
-      use amr_module
+      use amr_module, only: rnode,node,hxposs,hyposs,possk,tol,nghost
+      use amr_module, only: iorder,cornylo,cornxlo,edebug,eprint,goodpt
+      use amr_module, only: outunit,timemult,badpt,nestlevel
       use innerprod_module, only: calculate_max_innerproduct
       use adjoint_module, only: innerprod_index
       implicit none
@@ -42,7 +44,7 @@ c ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 c
 
 c
-      write(*,*) "Made it into errf1"
+      write(*,*) "Made it into errf1. size of valbgc: ", size(rctcrse)
       time  = rnode(timemult, mptr)
       xleft = rnode(cornxlo,mptr)
       levm  = node(nestlevel, mptr)

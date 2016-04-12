@@ -3,17 +3,25 @@ c -------------------------------------------------------------
 c
       subroutine errest (nvar,naux,lcheck,mptr,nx,ny)
 c
-      use amr_module
-      implicit double precision (a-h,o-z)
+      use amr_module, only: node,store1,store2,storeaux,alloc
+      use amr_module, only: nghost,tempptr,storeflags,ibuff
+      implicit none
+
+      integer, intent(in) :: nvar, naux, lcheck, mptr, nx, ny
+
 c
-c   ### changed to stack based storage 2/23/13 
+c   ### changed to stack based storage 2/23/13
 c   ### and broken into smaller routines to minimize 
 c   ### stack space
-     
-      double precision valbgc(nvar,nx/2+2*nghost,ny/2+2*nghost)
-      double precision auxbgc(naux,nx/2+2*nghost,ny/2+2*nghost)
-     
- 
+
+      real(kind=8) :: valbgc(nvar,nx/2+2*nghost,ny/2+2*nghost)
+      real(kind=8) :: auxbgc(naux,nx/2+2*nghost,ny/2+2*nghost)
+
+c   # Other local variables
+      integer :: locamrflags,locaux,locbig,locnew,locold
+      integer :: mbuff,mi2tot,mibuff,midub,mitot
+      integer :: mj2tot,mjbuff,mjdub,mjtot
+
 c :::::::::::::::::::::::::: ERREST :::::::::::::::::::::::::::::::::::
 c for this grid at level lcheck:
 c  estimate the error by taking a large (2h,2k) step based on the
@@ -23,7 +31,7 @@ c  error relation for a pth order  accurate integration formula.
 c  flag error plane as either bad (needs refinement), or good.
 c :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 c
-       write(*,*) "In errest"
+       write(*,*) "In errest. size of valbgc: ", size(valbgc)
        mitot  = nx + 2*nghost
        mjtot  = ny + 2*nghost
        locnew = node(store1,mptr)
