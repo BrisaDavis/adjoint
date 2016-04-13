@@ -280,12 +280,15 @@ def setrun(claw_pkg='geoclaw'):
     amrdata = rundata.amrdata
 
     # max number of refinement levels:
-    amrdata.amr_levels_max = 1
+    amrdata.amr_levels_max = 3
 
     # List of refinement ratios at each level (length at least amr_level_max-1)
-    amrdata.refinement_ratios_x = [5, 6, 4, 3, 30]
-    amrdata.refinement_ratios_y = [5, 6, 4, 3, 30]
-    amrdata.refinement_ratios_t = [5, 6, 4, 3, 4]
+    #amrdata.refinement_ratios_x = [5, 6, 6, 3, 30]
+    #amrdata.refinement_ratios_y = [5, 6, 6, 3, 30]
+    #amrdata.refinement_ratios_t = [5, 6, 6, 3, 4]
+    amrdata.refinement_ratios_x = [4, 4, 4, 3, 30]
+    amrdata.refinement_ratios_y = [4, 4, 4, 3, 30]
+    amrdata.refinement_ratios_t = [4, 4, 4, 3, 4]
 
 
     # Specify type of each aux variable in amrdata.auxtype.
@@ -299,7 +302,7 @@ def setrun(claw_pkg='geoclaw'):
     amrdata.flag_richardson_tol = 1.0  # Richardson tolerance
     
     # Flag for refinement using routine flag2refine:
-    amrdata.flag2refine = False      # use this?
+    amrdata.flag2refine = True      # use this?
     amrdata.flag2refine_tol = 0.5  # tolerance used in this routine
 
     # steps to take on each level L between regriddings of level L+1:
@@ -320,9 +323,19 @@ def setrun(claw_pkg='geoclaw'):
     # ---------------
     # Regions:
     # ---------------
-    regions = rundata.regiondata.regions = []
+    regions = rundata.regiondata.regions
     # to specify regions of refinement append lines of the form
     #  [minlevel,maxlevel,t1,t2,x1,x2,y1,y2]
+    regions.append([1, 1, 0., 1e9, 0, 360, -90, 90]) #whole world
+    regions.append([1, 3, 0., 7*3600., 0, 360, -90, 90]) #whole world
+    regions.append([1, 3, 7*3600.,10*3600., 170., 360, 18, 90])
+    regions.append([1, 3, 10*3600.,1e9, 195., 360, -90, 90])
+    #regions.append([4, 4, 0., 1800, 175, 195, 50, 54]) #earthquake source AASZ04
+    
+    regions.append([1, 2, 1800, 1e9, 235, 238, 34, 43]) # between shelf and CC
+    regions.append([4, 4, 0.0, 1800, 235, 236, 41, 42])
+    #regions.append([5, 5, 0.0, 1800, 235.5,235.83,41.6,41.8]) #only harbor
+    #regions.append([5, 6, 0.0, 1800, 235.78,235.84,41.735,41.775]) #only harbor
 
     #  ----- For developers ----- 
     # Toggle debugging print statements:
@@ -376,7 +389,7 @@ def setgeo(rundata):
     # Refinement settings
     refinement_data = rundata.refinement_data
     refinement_data.variable_dt_refinement_ratios = True
-    refinement_data.wave_tolerance = 0.02
+    refinement_data.wave_tolerance = 0.00002
     refinement_data.deep_depth = 100.0
     refinement_data.max_level_deep = 1
 

@@ -17,7 +17,7 @@ except:
 # Scratch directory for storing topo and dtopo files:
 scratch_dir = os.path.join(CLAW, 'adjoint', 'scratch')
 xcenter = 235.80917e0
-radius = 1.0e0
+radius = 0.2e0
 ycenter =41.74111e0
 
 def get_topo(makeplots=False):
@@ -48,13 +48,13 @@ def makeqinit():
         Create qinit data file
     """
     
-    nxpoints = 201
-    nypoints = 201
+    nxpoints = 501
+    nypoints = 501
     
-    xlower = 140.0e0
-    xupper = 250.0e0
-    ylower = 10.0e0
-    yupper = 62.0e0
+    xlower = 230.0e0
+    xupper = 240.0e0
+    ylower = 36.0e0
+    yupper = 46.0e0
     
     outfile= "hump.xyz"     
     topotools.topo1writer(outfile,qinit,xlower,xupper,ylower,yupper,nxpoints,nypoints)
@@ -62,7 +62,7 @@ def makeqinit():
 def qinit(x,y):
     from numpy import where
     ze = sqrt((x-xcenter)**2 + (y-ycenter)**2)
-    z = where(ze<radius, 1.0e0, 0.e0)
+    z = where(ze<radius, cos((pi/2)*(ze/radius)), 0.e0)
     return z
 
 if __name__=='__main__':

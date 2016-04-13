@@ -109,7 +109,7 @@ def setplot(plotdata):
     plotitem.add_colorbar = False
     plotitem.colorbar_shrink = 0.7
     plotitem.amr_celledges_show = [0,0,0]
-    plotitem.amr_patchedges_show = [0]
+    plotitem.amr_patchedges_show = [1]
 
     # Land
     plotitem = plotaxes.new_plotitem(plot_type='2d_imshow')
@@ -144,6 +144,50 @@ def setplot(plotdata):
     plotitem.amr_contour_colors = ['g']  # color on each level
     plotitem.kwargs = {'linestyles':'solid'}
     plotitem.amr_contour_show = [0,0,0,1]  # show contours only on finest level
+    plotitem.celledges_show = 0
+    plotitem.patchedges_show = 0
+    
+    
+    #-----------------------------------------
+    # Figure for zoom
+    #-----------------------------------------
+    plotfigure = plotdata.new_plotfigure(name='California', figno=10)
+    
+    # Set up for axes in this figure:
+    plotaxes = plotfigure.new_plotaxes()
+    plotaxes.title = 'California'
+    plotaxes.scaled = True
+    plotaxes.afteraxes = aa
+    
+    # Water
+    plotitem = plotaxes.new_plotitem(plot_type='2d_imshow')
+    plotitem.plot_var = geoplot.surface_or_depth
+    plotitem.imshow_cmap = my_cmap
+    plotitem.imshow_cmin = cmin_ocean
+    plotitem.imshow_cmax = cmax_ocean
+    plotitem.add_colorbar = False
+    plotitem.amr_celledges_show = [0,0,0]
+    plotitem.amr_patchedges_show = [0]
+    
+    # Land
+    plotitem = plotaxes.new_plotitem(plot_type='2d_imshow')
+    plotitem.plot_var = geoplot.land
+    plotitem.imshow_cmap = geoplot.land_colors
+    plotitem.imshow_cmin = 0.0
+    plotitem.imshow_cmax = 100.0
+    plotitem.add_colorbar = False
+    plotitem.amr_celledges_show = [0,0,0]
+    plotitem.amr_patchedges_show = [0]
+    plotaxes.xlimits = [234.2,236.8]
+    plotaxes.ylimits = [41,42.5]
+    
+    # add contour lines of bathy if desired:
+    plotitem = plotaxes.new_plotitem(plot_type='2d_contour')
+    plotitem.plot_var = geoplot.topo
+    plotitem.contour_levels = [0.]
+    plotitem.amr_contour_colors = ['k']  # color on each level
+    plotitem.kwargs = {'linestyles':'solid','linewidths':2}
+    plotitem.amr_contour_show = [0,0,0,0,0,1]
     plotitem.celledges_show = 0
     plotitem.patchedges_show = 0
     

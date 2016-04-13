@@ -124,8 +124,10 @@ c
         hLhat = -bL
         hRhat = -bR
 
+c        write(*,*) "Checking: ", hLhat, hRhat, hR, hL, drytol
+
 c       ! Check for wet/dry boundary
-        if (hR <= drytol) then
+        if (hR <= drytol .or. bR >= 0.d0) then
             hR = 0.d0
             huR = 0.d0
             hvR = 0.d0
@@ -133,10 +135,11 @@ c       ! Check for wet/dry boundary
             vR = 0.d0
             hRhat = 0.d0
         else
+c            write(*,*) "1 about to divide by: ", hR
             uR = huR/hR
             vR = hvR/hR
         endif
-        if (hL <= drytol) then
+        if (hL <= drytol .or. bL >= 0.d0) then
             hL = 0.d0
             huL = 0.d0
             hvL = 0.d0
@@ -144,6 +147,7 @@ c       ! Check for wet/dry boundary
             vL = 0.d0
             hLhat = 0.d0
         else
+c            write(*,*) "2 about to divide by: ", hL
             uL = huL/hL
             vL = hvL/hL
         endif
@@ -189,6 +193,7 @@ c               that mirror right
         endif
 
          !determine wave speeds
+c         write(*,*) "3 taking sqrt: ", hLhat,hRhat
          cL=sqrt(g*hLhat) ! 1 wave speed of left state
          cR=sqrt(g*hRhat) ! 2 wave speed of right state
 
@@ -200,13 +205,15 @@ c       # f-wave splitting
         delta(2) = -(hR+bR) + (hL+bL)
         delta(3) = 0
 
-        beta1 = (delta(1) + cR*delta(2))/(cL + cR)
-        beta2 = (-delta(1) + cL*delta(2))/(cL + cR)
+c        write(*,*) "4 about to divide by: ", cL, cR
         beta3 = delta(3)
 
         if (cL + cR == 0.d0) then
             beta1 = (delta(1) + cR*delta(2))
             beta2 = (-delta(1) + cL*delta(2))
+        else
+            beta1 = (delta(1) + cR*delta(2))/(cL + cR)
+            beta2 = (-delta(1) + cL*delta(2))/(cL + cR)
         endif
 
 c       # Compute the waves.
